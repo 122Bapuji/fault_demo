@@ -1,0 +1,92 @@
+! Begin Test Program
+! Disable Test Reset line
+TRST OFF;
+! Initialize UUT
+STATE RESET; 
+! End IR scans in DRPAUSE
+ENDIR DRPAUSE; 
+! Trailer & Headers for IR & DR
+HIR 0;
+TIR 0;
+HDR 0;
+TDR 0;
+! INTEST Instruction
+SIR 4 TDI (4);
+! San Test Vectors through the scan chain with length:  7
+SDR 7 TDI (50) MASK (ff) TDO (2); 
+SDR 7 TDI (21) MASK (ff) TDO (1); 
+SDR 7 TDI (e) MASK (f) TDO (8); 
+SDR 7 TDI (53) MASK (ff) TDO (e); 
+SDR 7 TDI (1b) MASK (ff) TDO (c); 
+SDR 7 TDI (2c) MASK (ff) TDO (1); 
+SDR 7 TDI (73) MASK (ff) TDO (f); 
+SDR 7 TDI (33) MASK (ff) TDO (d); 
+SDR 7 TDI (19) MASK (ff) TDO (c); 
+SDR 7 TDI (30) MASK (ff) TDO (1); 
+SDR 7 TDI (7b) MASK (ff) TDO (f); 
+SDR 7 TDI (4f) MASK (ff) TDO (e); 
+SDR 7 TDI (79) MASK (ff) TDO (f); 
+SDR 7 TDI (6d) MASK (ff) TDO (7); 
+SDR 7 TDI (17) MASK (ff) TDO (c); 
+SDR 7 TDI (1f) MASK (ff) TDO (c); 
+SDR 7 TDI (75) MASK (ff) TDO (7); 
+SDR 7 TDI (6f) MASK (ff) TDO (f); 
+SDR 7 TDI (6) MASK (f) TDO (0); 
+SDR 7 TDI (1d) MASK (ff) TDO (c); 
+SDR 7 TDI (13) MASK (ff) TDO (c); 
+SDR 7 TDI (42) MASK (ff) TDO (2); 
+SDR 7 TDI (44) MASK (ff) TDO (2); 
+SDR 7 TDI (6a) MASK (ff) TDO (b); 
+SDR 7 TDI (2b) MASK (ff) TDO (9); 
+SDR 7 TDI (4) MASK (f) TDO (0); 
+SDR 7 TDI (3b) MASK (ff) TDO (d); 
+SDR 7 TDI (68) MASK (ff) TDO (3); 
+SDR 7 TDI (31) MASK (ff) TDO (5); 
+SDR 7 TDI (77) MASK (ff) TDO (f); 
+SDR 7 TDI (54) MASK (ff) TDO (6); 
+SDR 7 TDI (67) MASK (ff) TDO (7); 
+SDR 7 TDI (36) MASK (ff) TDO (d); 
+SDR 7 TDI (2) MASK (f) TDO (0); 
+SDR 7 TDI (5d) MASK (ff) TDO (e); 
+SDR 7 TDI (12) MASK (ff) TDO (8); 
+SDR 7 TDI (51) MASK (ff) TDO (6); 
+SDR 7 TDI (6c) MASK (ff) TDO (3); 
+SDR 7 TDI (52) MASK (ff) TDO (a); 
+SDR 7 TDI (3f) MASK (ff) TDO (d); 
+SDR 7 TDI (48) MASK (ff) TDO (2); 
+SDR 7 TDI (5e) MASK (ff) TDO (e); 
+SDR 7 TDI (7e) MASK (ff) TDO (f); 
+SDR 7 TDI (b) MASK (f) TDO (8); 
+SDR 7 TDI (58) MASK (ff) TDO (a); 
+SDR 7 TDI (2f) MASK (ff) TDO (d); 
+SDR 7 TDI (57) MASK (ff) TDO (e); 
+SDR 7 TDI (8) MASK (f) TDO (0); 
+SDR 7 TDI (f) MASK (f) TDO (c); 
+SDR 7 TDI (71) MASK (ff) TDO (7); 
+SDR 7 TDI (41) MASK (ff) TDO (2); 
+SDR 7 TDI (65) MASK (ff) TDO (7); 
+SDR 7 TDI (18) MASK (ff) TDO (8); 
+SDR 7 TDI (39) MASK (ff) TDO (d); 
+SDR 7 TDI (5a) MASK (ff) TDO (a); 
+SDR 7 TDI (6b) MASK (ff) TDO (b); 
+SDR 7 TDI (59) MASK (ff) TDO (e); 
+SDR 7 TDI (76) MASK (ff) TDO (f); 
+SDR 7 TDI (7a) MASK (ff) TDO (b); 
+SDR 7 TDI (25) MASK (ff) TDO (5); 
+SDR 7 TDI (23) MASK (ff) TDO (1); 
+SDR 7 TDI (38) MASK (ff) TDO (9); 
+SDR 7 TDI (3c) MASK (ff) TDO (d); 
+SDR 7 TDI (7) MASK (f) TDO (4); 
+SDR 7 TDI (1) MASK (f) TDO (0); 
+SDR 7 TDI (4d) MASK (ff) TDO (6); 
+SDR 7 TDI (4c) MASK (ff) TDO (2); 
+SDR 7 TDI (62) MASK (ff) TDO (3); 
+SDR 7 TDI (7f) MASK (ff) TDO (f); 
+SDR 7 TDI (61) MASK (ff) TDO (3); 
+SDR 7 TDI (1c) MASK (ff) TDO (c); 
+SDR 7 TDI (29) MASK (ff) TDO (1); 
+SDR 7 TDI (14) MASK (ff) TDO (4); 
+SDR 7 TDI (5b) MASK (ff) TDO (e); 
+SDR 7 TDI (2a) MASK (ff) TDO (9); 
+SDR 7 TDI (4a) MASK (ff) TDO (a); 
+

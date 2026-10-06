@@ -1,0 +1,23 @@
+================================================================================
+                    FAULT COVERAGE CALCULATION REPORT
+================================================================================
+Formula:
+                       Detected Faults
+  Fault Coverage (%) = -------------------------- * 100%
+                       Total Testable Faults
+
+Metrics:
+  Total Fault Sites:                    14 sites
+  Total Stuck-At Faults (Uncollapsed):  28 faults
+  Total Testable Faults:                28 faults
+  Total Detected Faults:                28 faults
+  Undetected Faults:                     0 faults
+  Potentially Redundant Faults:          0 faults
+  Aborted Faults:                        0 faults
+
+Calculation:
+  Fault Coverage = ( 28 / 28 ) * 100% = 100.000%
+
+Conclusion:
+  Complete 100% stuck-at fault testability achieved using only 6 test vectors.
+================================================================================

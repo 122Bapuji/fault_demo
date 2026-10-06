@@ -1,0 +1,1 @@
+python3 verilog2spice.py -spice core_iolib_c1d.cdl -verilog test_pwr_rt.v -output top_module_name_of_test.cdl -pos_pwr VDD -neg_pwr VSS -delimiter

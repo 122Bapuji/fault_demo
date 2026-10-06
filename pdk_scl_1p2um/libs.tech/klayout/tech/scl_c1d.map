@@ -1,0 +1,13 @@
+# Layer Name    Purpose     GDS Layer/Datatype
+# --------------------------------------------
+
+metal1    LEFPIN,NET,SPNET,PIN,VIA         8  0
+metal1    LEFPIN,PIN                   8  0
+NAME      metal1/LABEL,metal1/LEFPIN   8  7
+
+metal2    LEFPIN,NET,SPNET,PIN,VIA     10  0
+metal2    LEFPIN,PIN                   10  0
+NAME      metal2/LABEL,metal2/LEFPIN   10  7
+
+
+via1     VIA,LEFPIN,PIN           9  0

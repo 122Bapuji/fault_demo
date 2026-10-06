@@ -1,0 +1,15 @@
+* Name of circuit:  alu/tiny_alu.bench
+* Primary inputs :
+  A B SEL 
+  
+* Primary outputs:
+  Y 
+
+* Test patterns and fault free responses:
+
+   1: 011 1
+   2: 100 0
+   3: 110 1
+   4: 010 0
+   5: 001 0
+   6: 101 1

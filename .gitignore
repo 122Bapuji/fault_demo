@@ -1,0 +1,19 @@
+# Pyverilog / PLY temporary parser files
+parser.out
+parsetab.py
+
+# Simulation executables & logs
+alu_sim
+logs/
+*.vcd
+*.vpd
+*.dump
+/tmp/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Editor backups
+*~
+*.swp

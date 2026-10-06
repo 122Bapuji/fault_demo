@@ -1,0 +1,660 @@
+<?xml version="1.0" encoding="utf-8"?>
+<klayout-macro>
+ <description/>
+ <version/>
+ <category>drc</category>
+ <prolog/>
+ <epilog/>
+ <doc/>
+ <autorun>false</autorun>
+ <autorun-early>false</autorun-early>
+ <priority>0</priority>
+ <shortcut/>
+ <show-in-menu>true</show-in-menu>
+ <group-name>drc_scripts</group-name>
+ <menu-path>tools_menu.drc.end</menu-path>
+ <interpreter>dsl</interpreter>
+ <dsl-interpreter-name>drc-dsl-xml</dsl-interpreter-name>
+ <text>#////////////////////////////////////////////////////////////////////
+#///      Owner : Semi-Conductor laboratory (SCL)                ////
+#////////////////////////////////////////////////////////////////////
+#///      DRC RULES FOR SCL 1.2um C1D PROCESS                     ///
+#////////////////////////////////////////////////////////////////////
+#///Version      Date                   By             Description///
+#///______________________________________________________________///
+#/// 1.1      04-Sep-2026                                Created  ///
+#////////////////////////////////////////////////////////////////////
+#////////////////////////////////////////////////////////////////////
+#//              TOPOLOGICAL DESIGN RULES                         ///
+#////////////////////////////////////////////////////////////////////
+#====================================================================
+#
+#    SCL Proprietary PDK
+#
+#    CONFIDENTIAL - Authorized use only under SCL Non-Disclosure Agreement (NDA).
+#
+#
+#    Distribution Terms:
+#     -  Provided SOLELY under SCL NDA for evaluation/internal use.
+#     -  No redistribution, sublicensing, or public disclosure permitted.
+#     -  Future open-sourcing by SCL under separate license/terms at SCL discretion.
+#
+#    Disclaimers:
+#     -  SCL NOT LIABLE for any damages or design failures happening due to KLayout tool bugs.
+#     -  User MUST validate all designs against SCL Process Design Kit (PDK)
+#        documentation and foundry specs.
+#   
+#================================================================//
+
+deep
+
+#==================================================================
+
+
+#$report1="report_c1d_drc.txt"
+
+#==================================================================
+
+
+require "time"
+require "logger"
+
+exec_start_time = Time.now
+
+logger = Logger.new(STDOUT)
+
+logger.formatter =
+    proc do |severity, datetime, progname, msg|
+        "#{msg}
+"
+    end
+# optionnal for a batch launch :   klayout -b -rd input=my_layout.gds -rd report=scl_drc.txt -r drc_scl.drc
+source($input, $top_cell) if $input
+
+if $report1
+    report("SCL DRC runset", $report1)
+else
+    report(
+        "SCL DRC runset",
+        File.join(File.dirname(RBA::CellView.active.filename), "scl_drc.txt")
+    )
+end
+
+#//*********************PROCESS LAYERS****************************///
+
+#Primary Layer Definition
+
+diffusion = input(2, 0)
+nwell = input(1, 0)
+nwell_rev = input(3, 0)
+poly = polygons(4,0)
+boron = input(5,0)
+boron_rev = input(6,0)
+contact = input(7,0)
+metal1 = input(8,0)
+metal1label = input(8,7)
+metal2 = input(10,0)
+metal2label = input(10,7)
+via = input(9,0)
+pad = polygons(11,0)
+res=input(35,0)
+respin=input(36,0)
+dummy_pad=input(40,0)
+nwelldiode  = input(38,0)
+pdiffdiode  = input(37,0)
+ndiffdiode  = input(39,0)
+npolyresreg         = input(43,0)
+ppolyresreg         = input(44,0)
+ndiffresreg         = input(45,0)
+pdiffresreg         = input(46,0)
+ignore_drc          = input(999,0)
+
+#Primary Layer Definition
+diffusion 	       =	diffusion 	-	ignore_drc 
+nwell 	              =	nwell 	       -	ignore_drc 
+nwell_rev 	       =	nwell_rev 	-	ignore_drc 
+poly 	              =	poly           -	ignore_drc 
+boron 	              =	boron 	        -	ignore_drc 
+boron_rev 	       =	boron_rev 	-	ignore_drc 
+contact 	       =	contact 	-	ignore_drc 
+metal1           	=	metal1 	       -	ignore_drc 
+metal1label 	       =	metal1label 	-	ignore_drc 
+metal2               =	metal2 	       -	ignore_drc 
+metal2label 	       =	metal2label 	-	ignore_drc 
+via 	              =	via 	       -	ignore_drc 
+pad 	              =	pad 	       -	ignore_drc 
+res	              =	res	       -	ignore_drc 
+respin	              =	respin	       -	ignore_drc 
+dummy_pad	       =	dummy_pad	-	ignore_drc 
+nwelldiode  	       =	nwelldiode  	-	ignore_drc 
+pdiffdiode  	       =	pdiffdiode  	-	ignore_drc 
+ndiffdiode  	       =	ndiffdiode  	-	ignore_drc 
+npolyresreg         	=	npolyresreg   -	ignore_drc 
+ppolyresreg         	=	ppolyresreg   -	ignore_drc 
+ndiffresreg         	=	ndiffresreg   -	ignore_drc 
+pdiffresreg         	=	pdiffresreg   -	ignore_drc 
+
+if ignore_drc.data.size &gt; 2 
+  raise "DRC Terminated: Top cell contains #{ignore_drc.data.size} polygons of layer 999:0 (Max allowed: 2)."
+end
+
+#================================================================///
+#Create layers to find substrate
+
+substrate       = extent
+psub            = substrate.not(nwell)
+
+#================================================================///
+#Create layers to find ndiff and pdiff substrates
+
+pdiff           = diffusion.and(boron)
+ndiff           = diffusion.not(pdiff)
+
+#================================================================///
+# Create layers to find type of diffusion in substrate
+
+pdiff_nwell     = pdiff.inside(nwell)
+ndiff_nwell     = ndiff.interacting(nwell)
+pdiff_psub      = pdiff.interacting(psub)
+ndiff_psub      = ndiff.inside(psub)
+
+#================================================================///
+# Create layers to find Poly,Diffusion &amp; Nwell Resistor
+
+nwelpin         = respin.and(nwell)
+rnwell          = res.and(nwell)
+inwell          = nwelpin.edges &amp; rnwell.edges
+
+ppoly           = poly.and(boron)
+npoly           = poly.not(ppoly)
+polypin         = respin.and(poly)
+rnchpoly        = res.and(npoly)
+rpchpoly        = res.and(ppoly)
+ipoly           = polypin.edges &amp; rpchpoly.edges
+inchpl          = polypin.edges &amp; rnchpoly.edges
+
+#================================================================///
+# Create layers to find gate,source and drain structures of N and P devices
+
+pgate           = ppoly.and(pdiff_nwell)
+psd_can         = pdiff_nwell.not(pgate)
+psd             = psd_can.interacting(pgate)
+ngate           = npoly.and(ndiff_psub)
+nsd_can         = ndiff_psub.not(ngate)
+nsd           = nsd_can.interacting(ngate)
+gate            = ngate.or(pgate)
+sd              = nsd.or(psd)
+
+#================================================================///
+# Create layers to find poly and nwell structures not belonging to Resistor
+
+nwellnr         = nwell.not(rnwell)
+rpoly           = res.and(poly)
+polynr          = poly.not(rpoly)
+
+#================================================================///
+# Create layers to find different contacts
+
+condiff         = respin.and(diffusion)
+nwpcnt          = nwelpin.and(condiff)
+ncont           = nwell.edges.and(nsd)
+pcont           = psub.edges.and(psd)
+diffnew         = diffusion.not(condiff)
+diffcnt         = diffnew.and(contact)
+polycnt         = polynr.and(contact)
+diffcont        = diffusion.and(contact)
+dfplcnt         = diffcont.or(polycnt)
+cnts            = dfplcnt.and(metal1)
+
+#================================================================///
+# Create layers for DRC and Connectivity
+
+polymetal       = metal1.and(poly)
+notpmetal       = metal1.not(polymetal)
+gatemetal       = gate.and(metal1)
+gatewell        = nwellnr.and(pgate)
+fnwell          = nwellnr.not(gatewell)
+
+#================================================================///
+# Create layers to find different contacts
+
+contacts        = diffcnt.or(polycnt)
+
+#================================================================///
+# Create layers to find different pad metal
+
+pad_metal1      = metal1.interacting(pad)
+pmetal          = metal1.or(metal2)
+butdiff           = pdiff.interacting(ndiff)
+butdiffcnt      = contact &amp; butdiff
+
+#///============================NWELL===============================///
+
+#/// 1.1.1 &amp; 1.1.2 Minimum NWell Width
+nwell.width(4.0.um, euclidian).output("1.1.1 &amp; 1.1.2 : Minimum Nwell width violations = 4.0um")
+
+#/// 1.2.2 Minimum Nwell spacing
+nwell.isolated(7.0.um,projection).output("1.2.2 : Minimum Nwell spacing violations = 7.0um")
+
+#/// 1.3.2 Minimium spacing Ndiff outside nwell
+ndiff_outside_nwell = ndiff.outside(nwell)
+
+#/// Minimum spacing check
+nwell.separation(ndiff_outside_nwell,3.5.um, euclidian).output("1.3.2 : Minimium spacing Ndiff outside nwell = 3.5um")
+
+#/// 1.3.3 Minimum spacing Pdiff inside Nwell
+pdiff_inside_nwell = pdiff.inside(nwell)
+nwell.enclosing(pdiff_inside_nwell , 3.5.um, euclidian).output("1.3.3 : Minimum spacing Pdiff inside Nwell = 3.5um")
+
+#///============================DIFFUSION=============================///
+
+#/// 2.1.1 Minimum Ndiff Width
+ndiff.width(2.5.um, euclidian).output("2.1.1 : Minimum Ndiff Width violations =  2.5um")
+
+#/// 2.1.2 Minimum Pdiff Width
+pdiff.width(2.5, euclidian).output("2.1.2 : Minimum Pdiff Width violations =  2.5um")
+
+#/// 2.2.1 Minimum Ndiff spacing
+ndiff.space(1.5.um, euclidian).output("2.2.1 : Minimum Ndiff spacing violations =  1.5um")
+
+#/// 2.2.2 Minimum Pdiff spacing
+pdiff.space(1.5, euclidian).output("2.2.2 : Minimum Pdiff spacing violations =  1.5um")
+
+#/// 2.2.3 Minimum pdiff to ndiff Spacing
+pdiff.separation(ndiff,1.5.um, euclidian).output("2.2.3 : Minimum Pdiff to Ndiff Spacing violations =  1.5um")
+
+#///============================NWELL-REV=============================///
+
+#/// 3.1.1 Nwell reversal check
+ovnwell = nwell.sized(2.um)
+xor_result_nwell_rev = ovnwell ^ nwell_rev
+
+#/// Output XOR results as violations
+xor_result_nwell_rev.output("3.1.1 : Shapes present in Nwell_rev XOR Nwell")
+
+#///============================POLY=================================///
+
+#/// 4.1.1 Minimum Poly width
+poly.width(1.2.um, euclidian).output("4.1.1 : Minimum Poly width violations  =  1.2um")
+
+#/// 4.2.1 Minimum Poly to Diffusion spacing
+poly.separation(diffusion,0.5.um).output("4.2.1 : Minimum Poly to diffusion spacing violations =  0.5um")
+
+#/// 4.2.2 Minimum Poly spacing
+#poly_edge=poly.edges
+#poly_edge.space(1.3.um).output("4.2.2 : Minimum Poly spacing edge violations = 1.3um")
+
+#/// 4.2.2 Minimum Poly spacing
+
+poly.isolated(1.3.um).output("4.2.2 : Minimum Poly spacing edge violations = 1.3um")
+
+
+
+#/// 4.3.1 &amp; 4.3.2 Minimum  NMOS Size
+ngate.width(1.2.um).output("4.3.1 &amp; 4.3.2 : Minimum NMOS length : 1.2um")
+ngate.with_area(0..3.0.um).output("4.3.1 &amp; 4.3.2 : Minimum NMOS Area : 3.0umÂ²")
+
+#/// 4.3.1 &amp; 4.3.3 Minimum PMOS Size
+pgate.width(1.5.um).output("4.3.1 &amp; 4.3.3 : Minimum PMOS length : 1.5u")
+pgate.with_area(0..3.75).output("4.3.1 &amp; 4.3.3 : Minimum PMOS Area : 3.75umÂ²")
+
+#/// 4.4.1  Minimum Poly Extension beyond Gate
+poly.enclosing(gate, 1.2, projection).polygons.without_area(0).output("4.4.1 : Minimum Poly Extension beyond Gate : 1.2um")
+
+#/// 4.5.1 Minimum Diffusion extenion beyond Gate
+diffusion.enclosing(poly,2.um).output("4.5.1 : Minimum Diffusion extenion beyond Gate violations = 2.0um")
+
+#/// 4.6.1 Maximun Poly dimension
+poly.sized(-15.um).sized(15.um).output("4.6.1 : Poly dimension exceeds Maximum 30u x 30u")
+
+#///============================BORON=================================///
+
+#/// 5.1.1 and 5.1.2 Minimum Boron width
+boron.width(2.5.um, euclidian).output("5.1.1 and 5.1.2 : Minimum Boron width violations =  2.5um")
+
+#/// 5.4.1 Minimum enclosure of Diffusion by Boron
+boron.enclosing(diffusion,0.7.um).output("5.4.1 : Minimum enclosure of Diffusion by Boron violations =  0.7um")
+boron.overlap(diffusion,0.7.um).output("5.4.1 : Minimum overlap of Diffusion by Boron violations =  0.7um")
+#//// 5.5.1 Minimum Boron to Ndiff spacing
+boron.separation(ndiff,0.7.um).output("5.5.1 : Minimum Boron to Ndiff spacing violations = 0.7um")
+
+#/// 5.7.1 Minimum Boron spacing  
+boron.space(1.5.um, euclidian).output("5.7.1 : Minimum Boron spacing violations =  1.5um")
+
+#///============================BORON-REV==============================///
+
+#/// 6.1.1 Boron reversal check
+xor_result = boron_rev ^ boron
+
+#/// Output XOR results as violations
+xor_result.output("6.1.1 : Shapes present in Boron_rev XOR Boron")
+
+#///============================CONTACT================================///
+
+#/// 7.1.1 Minimum Contact size
+padcontact=dummy_pad.and(contact)
+contactint=contact.not(padcontact)
+contact_edges = contactint.edges
+contact_size = contact_edges.without_length(1.5.um)
+contact_size.output("7.1.1 : Contacts not exactly 1.5u x 1.5u")
+
+
+
+#/// 7.2.1 &amp; 7.2.2 Maximum substrate contact size
+ngb= ndiff.and(nwell)
+layer_con_grbr = contact.inside(ngb)
+
+#///
+
+rectsn = layer_con_grbr.rectangles
+widen = rectsn.with_bbox_width(3.um,3.um)  # width &gt; 3um
+longn = rectsn.with_bbox_height(40.um,40.um)  # height &gt; 40um
+violations_n = widen + longn  # Union of violations
+violations_n.output("7.2.1 &amp; 7.2.2 : Maximum Nplus substrate contact size violations")
+
+#///
+
+pgb=pdiff.and(psub)
+layer_cop_grbr = contact.inside(pgb)
+rectsp = layer_cop_grbr.rectangles
+
+#///
+
+widep = rectsp.with_bbox_width(3.um,3.um)  # width &gt; 3um
+longp = rectsp.with_bbox_height(40.um,40.um)  # height &gt; 40um
+violations_p = widep + longp  # Union of violations
+violations_p.output("7.2.1 &amp; 7.2.2 : Maximum Pplus substrate contact size violations")
+
+#/// 7.3.1 Minimum contact spacing
+contact.space(1.5.um, euclidian).output("7.3.1 : Minimum Contact spacing violations =  1.5um")
+
+#/// 7.4.1 Minimum enclosure of poly to contact
+#poly.enclosing(contact , 0.7.um).output("7.4.1 : Minimum enclosure of Poly to Contact violations =  0.7um")
+
+
+p1c= poly.overlap(contact , 0.7.um, projection)
+p1ce=poly.enclosing(contact , 0.7.um, projection)
+poly_enclosure_contact=p1c.polygons + p1ce.polygons
+poly_enclosure_contact.output( "7.4.1 :  Minimum enclosure of Poly to Contact violations = 0.7um")
+
+#/// 7.4.2 Minimum enclosure of diffusion to contact
+#diffusion.enclosing(contact , 1.0).output("7.4.2 : Minimum enclosure of Diffusion to Contact violations =  1.0um")
+
+
+d1c= diffusion.overlap(contact , 1.0.um, projection)
+d1ce=diffusion.enclosing(contact , 1.0.um, projection)
+diffusion_enclosure_contact=d1c.polygons + d1ce.polygons
+diffusion_enclosure_contact.output("7.4.2 : Minimum enclosure of Diffusion to Contact violations =  1.0um")
+
+
+#/// 7.5.1 Minimum diffusion contact spacing to gate
+condiff         = respin.and(diffusion)
+diffnew         = diffusion-condiff
+diffcnt         = diffnew.and(contact)
+gate.separation(diffcnt, 1.2.um).output("7.5.1 : Minimum Diffusion contact spacing tO Poly gate = 1.2um")
+
+#/// 7.6.1 Minimum poly contact spacing to gate
+polycnt.separation(gate, 1.um).output("7.6.1 : Minimum Poly contact spacing tO active Gate area = 1.0um")
+
+#/// 7.7.1 Minimum butted contact extension to boron
+
+#/// ENCLOSURE boron butdiffcnt &lt; 2.5 (boron encloses butdiffcnt)
+boron.enclosing( butdiffcnt, 2.5.um).output("7.7.1 : Minimum butted Contact extension to Boron")
+
+#/// INTERNAL butdiffcnt boron &lt; 2.5 (butdiffcnt inside boron)
+butdiffcnt.width(2.5.um).output("7.7.1 : Minimum butted Diffusion Contact width = 2.5um")
+
+#/// Note 7.1 Poly contact in diffusion not allowed
+polycnt7_in_diffusion=diffusion.and(polycnt)
+polycnt7_in_diffusion.output("7.1 : Poly Contact in Diffusion NOT ALLOWED")
+
+#/// Note 7.2 unwanted contacts
+unwanted_contacts = contact - cnts
+unwanted_contacts.output("7.2 : Contact NOT IN Poly OR Diffusion AND Metal1")    
+                  
+#///============================METAL1================================///
+
+#/// 8.1.1 Minimum Metal1 spacing
+#metal1.space(1.5.um, euclidian).output("8.1.1 : Minimum Metal1 spacing violations = 1.5um")
+metal1.isolated(1.5.um, euclidian).output("8.1.1 : Minimum Metal1 spacing violations = 1.5um")
+
+#/// 8.2.1 Minimum Metal1 width
+metal1.width(2.4.um, euclidian).output("8.2.1 : Minimum Metal1 width violations = 2.4um")
+#metal1.with_bbox_width(2.4.um,2.4.um).output("8.2.1 : Minimum Metal1 width violations = 2.4um")
+
+#/// 8.3.1 Minimum Metal1 enclosure to Contact
+#metal1.enclosing(contact , 0.5.um).output("8.3.1 : Minimum Metal1 enclosure to Contact violations = 0.5um")
+#metal1.overlap(contact , 0.5.um).output("8.3.1 : Minimum Metal1 overlap to Contact violations = 0.5um")
+
+m1c= metal1.overlap(contact , 0.5.um, projection)
+m1ce=metal1.enclosing(contact , 0.5.um, projection)
+mn1c= contact.not_interacting(metal1)
+metal1_enclosure_contact=m1c.polygons + m1ce.polygons + mn1c
+metal1_enclosure_contact.output( "8.3.1 : Minimum Metal1 enclose to contact violations = 0.5um")
+
+
+
+#/// 8.4.1 Minimum Metal1 enclousure to Pad Contacts
+nwell_pad = nwell.interacting(pad)
+diff_nwell_pad = diffusion.interacting(nwell_pad)
+pad_contact = contact.and(diff_nwell_pad)
+metal1.enclosing(pad_contact , 1.2.um).output("8.4.1 : Minimum Metal1 enclousure to Pad Contacts =  1.2um")
+ 
+#/// 8.9.1 Minimum bonding Pad spacing to Diffusion
+pad.separation(diffusion,10.um,projection).output("8.9.1 : Minimum bonding Pad spacing to Diffusion violations = 10.0um")
+
+#/// 8.9.2 Minimum bonding Pad spacing to Poly
+pad.separation(poly, 30.um, projection).output("8.9.2 : Minimum bonding Pad spacing to Poly violations = 30.0um")
+
+#/// 8.9.3 Minimum bonding Pad spacing to Contact
+pad.separation(contact,15.um,projection).output("8.9.3 : Minimum bonding Pad spacing to Contact violations = 15.0um")
+
+#/// 8.9.4 Minimum bonding Pad spacing to Metal1
+pad.separation(metal1,30.um,projection).output("8.9.4 : Minimum bonding Pad spacing to Metal1 violations = 30.0um")
+     
+#/// 8.9.5 Minimum enclousure of Metal1 to Pad window
+metal1.enclosing(pad , 5.um,projection).output("8.9.5 : Minimum enclousure of Metal1 to Pad window violations = 5.0um")
+
+#/// NOTE 8.1 NO Poly allowed underneath bonding Pad Metal1
+pad_met_int = metal1 &amp; pad
+pad_met_int_poly=pad_met_int &amp; poly
+pad_met_int_poly.output("8.1 : NO Poly allowed underneath bonding Pad Metal1")
+
+#///============================VIA================================///
+
+#/// 9.1.1 Exact via size
+
+#/// References
+padvia=dummy_pad.and(via)
+viaint=via.not(padvia)
+
+viaint_edges = viaint.edges
+viaint_size = viaint_edges.without_length(1.5.um)
+
+#/// SVRF: @EXACT via WIDTH = 1.5 X 1.5
+viaint_size.output("9.1.1 : Exact via width = 1.5um")
+
+
+
+#/// SVRF: viaint 1.5x1.5 rectangles (flag for review)
+
+#/// 9.2.1 Minimum via to via spacing
+via.space(1.5, euclidian).output("9.2.1 : Minimum via to via spacing violations = 1.5um")
+
+#/// 9.3.1 Minimum via to contact spacing
+
+via_and_contact = via.and(contact)
+#via_outside_contact = via - contact
+
+#via_and_contact_int = via_and_contact.interacting(via_outside_contact)
+via_contact_space= via.separation(contact,1.5.um)
+via_interacting_contact = via.interacting(contact)
+via_contact_space_overlap=via_contact_space.polygons + via_and_contact + via_interacting_contact
+
+
+via_contact_space_overlap.output( "9.3.1 : Minimum via to contact spacing violations = 1.5um")
+
+
+#via.separation(contact,1.5.um).output( "9.3.1 : Minimum via to contact spacing violations = 1.5um")
+
+#/// 9.4.1 Minimum via to Poly spacing
+via.separation(poly,1.2.um).output("9.4.1 : Minimum via to Poly spacing violations = 1.2um")
+
+#/// 9.5.1 Minimum Metal1 overlap to via
+#metal1.enclosing(via , 0.5.um).output("9.5.1 : Minimum Metal1 encloseto via violations = 0.5um")
+#metal1.overlap(via , 0.5.um).output("9.5.1 : Minimum Metal1 overlap to via violations = 0.5um")
+m1v= metal1.overlap(via , 0.5.um, projection)
+m1e=metal1.enclosing(via , 0.5.um, projection)
+mn1v= via.not_interacting(metal1)
+metal1_enclosure=m1v.polygons + m1e.polygons + mn1v
+metal1_enclosure.output( "9.5.1 : Minimum Metal1 enclose to via violations = 0.5um")
+
+
+#/// 9.6.1 Minimum Metal2 overlap to via
+#metal2.enclosing(via , 0.5.um).output( "9.6.1 : Minimum Metal2 overlap to via violations = 0.5um")
+
+m2v= metal2.overlap(via , 0.5.um, projection)
+m2e=metal2.enclosing(via , 0.5.um, projection)
+mn2v= via.not_interacting(metal2)
+metal2_enclosure=m2v.polygons + m2e.polygons + mn2v
+metal2_enclosure.output( "9.6.1 : Minimum Metal2 enclose to via violations = 0.5um")
+
+
+#///============================METAL2================================///
+
+#/// 10.1.1 Minimum Metal2 to Metal2 spacing
+#metal2.space(1.7.um, euclidian).output("10.1.1 : Minimum Metal2 to Metal2 spacing violations = 1.7um")
+metal2.isolated(1.7.um, euclidian).output("10.1.1 : Minimum Metal2 to Metal2 spacing violations = 1.7um")
+
+#/// 10.2.1 Minimum Metal2 width
+metal2.width(2.5.um, euclidian).output("10.2.1 : Minimum Metal2 width violations = 2.5um")
+#metal2.with_bbox_width(2.5.um, 2.5.um).output("10.2.1 : Minimum Metal2 width violations = 2.5um")
+
+
+#/// 10.3.2 Minimum bonding pad spacing to via
+via.separation(pad,15.um,projection).output("10.3.2 : Minimum bonding pad spacing to via violations = 15.0um")
+
+#/// 10.3.3 Minimum bonding pad metal spacing to Metal2
+metal2.separation(pad,30.um,projection).output("10.3.3 : Minimum bonding pad metal spacing to Metal2 violations = 30.0um")
+
+#/// 10.3.5 Minimum enclosure of Metal2 to pad
+metal2.enclosing(pad , 5.um).output("10.3.5 : Minimum enclosure of Metal2 to pad violations = 5.0um")
+
+#///============================PAD================================///
+
+#/// 11.1.1 Minimum pad window size
+pad_edges = pad.edges
+pad_size = pad_edges.without_length(90.um)
+pad_size.output("11.1.1 : Minimum pad window size = 90 X 90 ")
+
+#/// 11.2.1 Minimum pad to pad spacing
+pad.space(100.um).output("11.2.1 : Minimum pad to pad spacing violations = 100.0um")
+
+#/// NOTE 11.1 unwanted guardbar
+unwanted_guardbar = ngate.inside(ngb)
+unwanted_guardbar.output("11.1 : unwanted Nguardbar CONNECTED TO SOURCE/DRAIN OF nmos")
+                                             
+#/// NOTE 11.2 Illegal guardbar
+Illegal_guardbar = psd-nwell
+Illegal_guardbar.output("11.2 : unwanted Pguardbar CUTTING nwell")
+
+#/// NOTE 11.3 pad not on metal1 or metal2 are illegal
+pad.not(pmetal).output("11.3 : pad Metal NOT ON Metal1 OR Metal2 ARE ILLEGAL")
+
+#///============================ERC================================///
+
+#/// RECOMMENDED nwell resisitor width 10u
+rnwell.width(10.0.um).output("rnwell width violations = 10.0um")
+
+#/// check for illegal contacts covering resistors
+
+#/// GUIDELINE_3_bad_cont_nwell_res
+                  
+                    rescont_nwell         = rnwell.and(contact)
+                    res_not_interact_well = rescont_nwell.not_interacting(respin)
+           res_not_interact_well.output("@GUIDELINE-3 Bad contact covering nwell resistor")                
+
+#/// GUIDELINE_3_bad_cont_npoly_res
+                   
+                    rescont_npoly = rnchpoly.and(contact)
+                    rescont_npoly_not_respin=rescont_npoly.not_interacting(respin)
+        rescont_npoly_not_respin.output(" @GUIDELINE-3 Bad contact covering npoly resistor")    
+           
+#/// GUIDELINE_3_bad_cont_ppoly_res {
+                  
+                    rescont_ppoly = rpchpoly.and(contact)
+                      rescont_ppoly_not_respin= rescont_ppoly.not_interacting(respin)
+        rescont_ppoly_not_respin.output("@GUIDELINE-3 Bad contact covering ppoly resistor")    
+
+#/// check for floating gates
+
+#/// GUIDELINE_4_floating_gates     
+
+         metal1cont     = metal1.and(contact)
+         connected_poly = metal1cont.inside(poly)
+         floating_gate  = connected_poly.not(poly)
+         floating_gate.output("@GUIDELINE_4_floating_gates  ")   
+ 
+#/// GUIDELINE_1_max_sub_cont_50  
+
+          nwell_pgate = nwellnr.interacting(pgate)
+ 
+#/// Check for gates connected to supply
+
+        trans  = diffusion.and(polynr)
+        ngate1 = trans.not(nwell)
+        pgate1 = trans.and(nwell)
+        ndev   = ngate1.not(boron)
+        pdev   = pgate1.not(boron)
+
+#/// NOTE  Via on diffusion edges not allowed
+
+
+#/// GUIDELINE_6_touching_via_diff
+                      
+                  #via_diff_edges = via.interacting(diffusion.edges)
+                 #via_diff_edges.output(" @GUIDELINE-6 AVOID PLACING vias ON diff EDGES")         
+
+#/// GUIDELINE_6_touching_via_diff
+
+
+via_and_diff = via.and(diffusion).not(dummy_pad)
+
+via_outside_diff = via - diffusion
+
+via_guideline6 = via_and_diff.interacting(via_outside_diff)
+
+via_guideline6.output(" @GUIDELINE-6 AVOID PLACING vias ON diff EDGES")
+
+
+
+ 
+ 
+#/// check for distance pgate to welltap
+
+#/// GUIDELINE_5_SPAC_WELLTAP_PGATE_GT50
+     
+                    welltap        = ndiff.and(nwellnr)
+                    welltap_ovs    = welltap.size(100.0.um)
+                    pgate_wellok   = pgate.interacting(welltap_ovs)
+                    pgate_well_tap = pgate.not(pgate_wellok)
+        pgate_well_tap.output("@GUIDELINE-5 distance pgate welltap &gt; 100.0um  ")                 
+
+
+#/// check for distance ngate to subtap
+
+#/// GUIDELINE_5_SPAC_SUBTAP_NGATE_GT50
+
+#/// this is only an estimation, because size may jump well edge
+#/// size taps by 100 U and check what is outside
+
+                    subtap      = pdiff.not(nwellnr)
+                    subtap_ovs  = subtap.size(100.0.um)
+                    ngate_subok = ngate.interacting(subtap_ovs)
+                    ngate_subok_tap = ngate.not(ngate_subok)
+        ngate_subok_tap.output("@GUIDELINE-5 distance ngate subtap &gt; 100.0um")
+                         
+verbose(true)
+
+</text>
+</klayout-macro>

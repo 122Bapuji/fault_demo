@@ -1,0 +1,28 @@
+================================================================================
+                    SCAN DFT INSERTION & VERIFICATION REPORT
+================================================================================
+Design:      seq_alu (2-bit Registered ALU)
+Tool:        Fault 0.6.1 Scan Insertion Engine (fault chain)
+Target Lib:  OSU 0.35um (osu035_stdcells.lib)
+
+Scan Chain Architecture:
+  Total Scan Chain Length:        9 flip-flops
+  Internal Scan Cells:            2 flip-flops (replaces functional DFFs: _15_, _16_)
+  Boundary Scan Cells:            7 flip-flops (created for primary I/Os: a[1:0], b[1:0], sel, y[1:0])
+  Dedicated DFT Signals Added:
+    - sin:   Scan Serial Input
+    - sout:  Scan Serial Output
+    - shift: Scan Shift Enable (1 = Shift mode, 0 = Functional/Capture mode)
+    - test:  Test Mode Enable
+    - tck:   Test Clock
+
+Scan Testing Protocol:
+  1. Functional Mode:  test=0, shift=0. Circuit behaves as normal ALU.
+  2. Scan Shift-In:    test=1, shift=1. Apply 9 clock cycles on clk/tck to load vector via sin.
+  3. Capture Cycle:    test=1, shift=0. Apply 1 clock cycle to let combinational logic evaluate.
+  4. Scan Shift-Out:   test=1, shift=1. Apply 9 clock cycles to unload response via sout.
+  5. Response Compare: Compare captured bitstream with golden response.
+
+Verification Result:
+  Scan chain integrity verified successfully by Fault tool and Verilog testbench simulation.
+================================================================================

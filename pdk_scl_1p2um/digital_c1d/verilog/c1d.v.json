@@ -1,0 +1,855 @@
+{
+  "cells" : [
+    {
+      "name" : "AND201",
+      "statements" : [
+        "OUT1 = AND(IN1, __IN2___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "AND301",
+      "statements" : [
+        "OUT1 = AND(IN1, __IN2___, __IN3___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "AND401",
+      "statements" : [
+        "OUT1 = AND(IN1, __IN2___, __IN3___, __IN4___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "AND501",
+      "statements" : [
+        "OUT1 = AND(IN1, __IN2___, __IN3___, __IN4___, __IN5___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "AND601",
+      "statements" : [
+        "OUT1 = AND(IN1, __IN2___, __IN3___, __IN4___, __IN5___, __IN6___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "AND701",
+      "statements" : [
+        "OUT1 = AND(IN1, __IN2___, __IN3___, __IN4___, __IN5___, __IN6___, __IN7___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "AND801",
+      "statements" : [
+        "OUT1 = AND(IN1, __IN2___, __IN3___, __IN4___, __IN5___, __IN6___, __IN7___, __IN8___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "NND201",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "NND300",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "NND301",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "NND401",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "NND501",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "NND601",
+      "statements" : [
+        "__scl_net_not_0___ = NOT(IN1)",
+        "__scl_net_not_1___ = NOT(__IN2___)",
+        "__scl_net_not_2___ = NOT(__IN3___)",
+        "__scl_net_not_3___ = NOT(__IN4___)",
+        "__scl_net_not_4___ = NOT(__IN5___)",
+        "__scl_net_not_5___ = NOT(__IN6___)",
+        "OUT1 = OR(__scl_net_not_0___, __scl_net_not_1___, __scl_net_not_2___, __scl_net_not_3___, __scl_net_not_4___, __scl_net_not_5___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "NND701",
+      "statements" : [
+        "__scl_net_not_0___ = NOT(IN1)",
+        "__scl_net_not_1___ = NOT(__IN2___)",
+        "__scl_net_not_2___ = NOT(__IN3___)",
+        "__scl_net_not_3___ = NOT(__IN4___)",
+        "__scl_net_not_4___ = NOT(__IN5___)",
+        "__scl_net_not_5___ = NOT(__IN6___)",
+        "__scl_net_not_6___ = NOT(__IN7___)",
+        "OUT1 = OR(__scl_net_not_0___, __scl_net_not_1___, __scl_net_not_2___, __scl_net_not_3___, __scl_net_not_4___, __scl_net_not_5___, __scl_net_not_6___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "NOR200",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "NOR201",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "NOR300",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "NOR301",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "NOR401",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "NOR501",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "NOR601",
+      "statements" : [
+        "__scl_net_not_0___ = NOT(IN1)",
+        "__scl_net_not_1___ = NOT(__IN2___)",
+        "__scl_net_not_2___ = NOT(__IN3___)",
+        "__scl_net_not_3___ = NOT(__IN4___)",
+        "__scl_net_not_4___ = NOT(__IN5___)",
+        "__scl_net_not_5___ = NOT(__IN6___)",
+        "OUT1 = AND(__scl_net_not_0___, __scl_net_not_1___, __scl_net_not_2___, __scl_net_not_3___, __scl_net_not_4___, __scl_net_not_5___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "NOR701",
+      "statements" : [
+        "__scl_net_not_0___ = NOT(IN1)",
+        "__scl_net_not_1___ = NOT(__IN2___)",
+        "__scl_net_not_2___ = NOT(__IN3___)",
+        "__scl_net_not_3___ = NOT(__IN4___)",
+        "__scl_net_not_4___ = NOT(__IN5___)",
+        "__scl_net_not_5___ = NOT(__IN6___)",
+        "__scl_net_not_6___ = NOT(__IN7___)",
+        "OUT1 = AND(__scl_net_not_0___, __scl_net_not_1___, __scl_net_not_2___, __scl_net_not_3___, __scl_net_not_4___, __scl_net_not_5___, __scl_net_not_6___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "NOR801",
+      "statements" : [
+        "__scl_net_not_0___ = NOT(IN1)",
+        "__scl_net_not_1___ = NOT(__IN2___)",
+        "__scl_net_not_2___ = NOT(__IN3___)",
+        "__scl_net_not_3___ = NOT(__IN4___)",
+        "__scl_net_not_4___ = NOT(__IN5___)",
+        "__scl_net_not_5___ = NOT(__IN6___)",
+        "__scl_net_not_6___ = NOT(__IN7___)",
+        "__scl_net_not_7___ = NOT(__IN8___)",
+        "OUT1 = AND(__scl_net_not_0___, __scl_net_not_1___, __scl_net_not_2___, __scl_net_not_3___, __scl_net_not_4___, __scl_net_not_5___, __scl_net_not_6___, __scl_net_not_7___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "OR2101",
+      "statements" : [
+        "OUT1 = OR(IN1, __IN2___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "OR3101",
+      "statements" : [
+        "OUT1 = OR(IN1, __IN2___, __IN3___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "OR4101",
+      "statements" : [
+        "OUT1 = OR(IN1, __IN2___, __IN3___, __IN4___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "OR5101",
+      "statements" : [
+        "OUT1 = OR(IN1, __IN2___, __IN3___, __IN4___, __IN5___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "OR7101",
+      "statements" : [
+        "OUT1 = OR(IN1, __IN2___, __IN3___, __IN4___, __IN5___, __IN6___, __IN7___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "OR8101",
+      "statements" : [
+        "OUT1 = OR(IN1, __IN2___, __IN3___, __IN4___, __IN5___, __IN6___, __IN7___, __IN8___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "DEC24H",
+      "statements" : [
+        "__scl_net_not_1___ = NOT(__A1___)",
+        "__scl_net_not_2___ = NOT(__A2___)",
+        "Q1 = AND(EN, __scl_net_not_1___, __scl_net_not_2___)",
+        "__Q2___ = AND(EN, __A1___, __scl_net_not_2___)",
+        "__Q3___ = AND(EN, __scl_net_not_1___, __A2___)",
+        "__Q4___ = AND(EN, __A1___, __A2___)"
+      ],
+      "output" : "Q1",
+      "inputs" : [
+        "EN"
+      ]
+    },
+    {
+      "name" : "DEC24L",
+      "statements" : [
+        "__scl_net_not_0___ = NOT(EN)",
+        "Q1 = OR(__scl_net_not_0___, __A1___, __A2___)",
+        "__scl_net_not_1___ = NOT(__A1___)",
+        "__Q2___ = OR(__scl_net_not_0___, __scl_net_not_1___, __A2___)",
+        "__scl_net_not_2___ = NOT(__A2___)",
+        "__Q3___ = OR(__scl_net_not_0___, __A1___, __scl_net_not_2___)"
+      ],
+      "output" : "Q1",
+      "inputs" : [
+        "EN"
+      ]
+    },
+    {
+      "name" : "MX201B",
+      "statements" : [
+
+      ],
+      "output" : "OUTB",
+      "inputs" : [
+        "A0"
+      ]
+    },
+    {
+      "name" : "MX2101",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "A0"
+      ]
+    },
+    {
+      "name" : "MX4122",
+      "statements" : [
+        "__scl_net_not_5___ = NOT(__A1___)",
+        "__select_logic_net_1_O0___ = AND(__A0___, __scl_net_not_5___)",
+        "__select_logic_net_2_O0___ = AND(__A0___, __A1___)",
+        "__scl_net_not_4___ = NOT(__A0___)",
+        "__select_logic_net_3_O0___ = AND(__scl_net_not_4___, __A1___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "D0"
+      ]
+    },
+    {
+      "name" : "INVR01",
+      "statements" : [
+        "OUT1 = NOT(IN1)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "INVR02",
+      "statements" : [
+        "OUT1 = NOT(IN1)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "INVR03",
+      "statements" : [
+        "OUT1 = NOT(IN1)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "INVR04",
+      "statements" : [
+        "OUT1 = NOT(IN1)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "INVR05",
+      "statements" : [
+        "OUT1 = NOT(IN1)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "INVR06",
+      "statements" : [
+        "OUT1 = NOT(IN1)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "CDRI01",
+      "statements" : [
+        "Q = BUFF(IN1)"
+      ],
+      "output" : "Q",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "CDRI02",
+      "statements" : [
+        "__QB___ = NOT(__Q___)",
+        "Q = BUFF(IN1)"
+      ],
+      "output" : "Q",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "DELBUF",
+      "statements" : [
+        "OUT1 = BUFF(IN1)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "TBUF01",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "TINV01",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "ADNR01",
+      "statements" : [
+        "__scl_net_not_0___ = NOT(A)",
+        "__scl_net_not_2___ = NOT(__C___)",
+        "__\\scl_net_and_-02b___ = AND(__scl_net_not_0___, __scl_net_not_2___)",
+        "__scl_net_not_1___ = NOT(__B___)",
+        "__scl_net_and_1b2b___ = AND(__scl_net_not_1___, __scl_net_not_2___)",
+        "OUT1 = OR(__\\scl_net_and_-02b___, __scl_net_and_1b2b___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "A"
+      ]
+    },
+    {
+      "name" : "ADOR16",
+      "statements" : [
+        "__scl_net_and_45___ = AND(__E___, __F___)",
+        "__scl_net_and_23___ = AND(__C___, __D___)",
+        "__scl_net_and_01___ = AND(A, __B___)",
+        "OUT1 = OR(__scl_net_and_45___, __scl_net_and_23___, __scl_net_and_01___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "A"
+      ]
+    },
+    {
+      "name" : "AOI401",
+      "statements" : [
+        "__scl_net_not_0___ = NOT(A)",
+        "__scl_net_not_2___ = NOT(__C___)",
+        "__\\scl_net_and_-02b___ = AND(__scl_net_not_0___, __scl_net_not_2___)",
+        "__scl_net_not_3___ = NOT(__D___)",
+        "__\\scl_net_and_-03b___ = AND(__scl_net_not_0___, __scl_net_not_3___)",
+        "__scl_net_not_1___ = NOT(__B___)",
+        "__scl_net_and_1b2b___ = AND(__scl_net_not_1___, __scl_net_not_2___)",
+        "__scl_net_and_1b3b___ = AND(__scl_net_not_1___, __scl_net_not_3___)",
+        "OUT1 = OR(__\\scl_net_and_-02b___, __\\scl_net_and_-03b___, __scl_net_and_1b2b___, __scl_net_and_1b3b___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "A"
+      ]
+    },
+    {
+      "name" : "ORND01",
+      "statements" : [
+        "__scl_net_not_0___ = NOT(A)",
+        "__scl_net_not_1___ = NOT(__B___)",
+        "__\\scl_net_and_-01b___ = AND(__scl_net_not_0___, __scl_net_not_1___)",
+        "__scl_net_not_2___ = NOT(__C___)",
+        "OUT1 = OR(__\\scl_net_and_-01b___, __scl_net_not_2___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "A"
+      ]
+    },
+    {
+      "name" : "XNR201",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "XOR201",
+      "statements" : [
+        "__or_out___ = OR(IN1, IN2)",
+        "__nand_out___ = NAND(IN1, IN2)",
+        "OUT1 = AND(__or_out___, __nand_out___)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "DFCL11",
+      "statements" : [
+        "Q = BUFF(__Q_buf___)",
+        "__QB___ = NOT(__Q_buf___)"
+      ],
+      "output" : "Q",
+      "inputs" : [
+        "D"
+      ]
+    },
+    {
+      "name" : "DFFL11",
+      "statements" : [
+        "Q = BUFF(__Q_buf___)",
+        "__QB___ = NOT(__Q_buf___)"
+      ],
+      "output" : "Q",
+      "inputs" : [
+        "D"
+      ]
+    },
+    {
+      "name" : "DFPC11",
+      "statements" : [
+        "Q = BUFF(__Q_buf___)",
+        "__QB___ = NOT(__Q_buf___)",
+        "__scl_cnd_tchks0___ = AND(__PRB___, __CLRB___)"
+      ],
+      "output" : "Q",
+      "inputs" : [
+        "D"
+      ]
+    },
+    {
+      "name" : "DFPR11",
+      "statements" : [
+        "Q = BUFF(__Q_buf___)",
+        "__QB___ = NOT(__Q_buf___)"
+      ],
+      "output" : "Q",
+      "inputs" : [
+        "D"
+      ]
+    },
+    {
+      "name" : "LTCH11",
+      "statements" : [
+        "Q = BUFF(__Q_buf___)",
+        "__QB___ = NOT(__Q_buf___)"
+      ],
+      "output" : "Q",
+      "inputs" : [
+        "D"
+      ]
+    },
+    {
+      "name" : "LTCL11",
+      "statements" : [
+        "Q = BUFF(__Q_buf___)",
+        "__QB___ = NOT(__Q_buf___)"
+      ],
+      "output" : "Q",
+      "inputs" : [
+        "D"
+      ]
+    },
+    {
+      "name" : "LTPC11",
+      "statements" : [
+        "Q = BUFF(__Q_buf___)",
+        "__QB___ = NOT(__Q_buf___)",
+        "__scl_cnd_tchks0___ = AND(__CLRB___, __PRB___)"
+      ],
+      "output" : "Q",
+      "inputs" : [
+        "D"
+      ]
+    },
+    {
+      "name" : "LTPR11",
+      "statements" : [
+        "Q = BUFF(__Q_buf___)",
+        "__QB___ = NOT(__Q_buf___)"
+      ],
+      "output" : "Q",
+      "inputs" : [
+        "D"
+      ]
+    },
+    {
+      "name" : "IPAD20",
+      "statements" : [
+        "OUT1 = BUFF(IN1)"
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "OPAD02",
+      "statements" : [
+        "PAD = NOT(IN1)"
+      ],
+      "output" : "PAD",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "BPD220",
+      "statements" : [
+        "__d___ = NOT(__N_EN___)",
+        "__c___ = AND(__d___, P_EN)"
+      ],
+      "output" : "TO_CORE",
+      "inputs" : [
+        "P_EN"
+      ]
+    },
+    {
+      "name" : "BPD22D",
+      "statements" : [
+        "__d___ = NOT(__N_EN___)",
+        "__c___ = AND(__d___, P_EN)"
+      ],
+      "output" : "TO_CORE",
+      "inputs" : [
+        "P_EN"
+      ]
+    },
+    {
+      "name" : "BPD22U",
+      "statements" : [
+        "__d___ = NOT(__N_EN___)",
+        "__c___ = AND(__d___, P_EN)"
+      ],
+      "output" : "TO_CORE",
+      "inputs" : [
+        "P_EN"
+      ]
+    },
+    {
+      "name" : "BPD240",
+      "statements" : [
+        "__d___ = NOT(__N_EN___)",
+        "__c___ = AND(__d___, P_EN)"
+      ],
+      "output" : "TO_CORE",
+      "inputs" : [
+        "P_EN"
+      ]
+    },
+    {
+      "name" : "BPD24D",
+      "statements" : [
+        "__d___ = NOT(__N_EN___)",
+        "__c___ = AND(__d___, P_EN)"
+      ],
+      "output" : "TO_CORE",
+      "inputs" : [
+        "P_EN"
+      ]
+    },
+    {
+      "name" : "BPD24U",
+      "statements" : [
+        "__d___ = NOT(__N_EN___)",
+        "__c___ = AND(__d___, P_EN)"
+      ],
+      "output" : "TO_CORE",
+      "inputs" : [
+        "P_EN"
+      ]
+    },
+    {
+      "name" : "BPD320",
+      "statements" : [
+        "__d___ = NOT(__N_EN___)",
+        "__c___ = AND(__d___, P_EN)"
+      ],
+      "output" : "TO_CORE",
+      "inputs" : [
+        "P_EN"
+      ]
+    },
+    {
+      "name" : "BPD340",
+      "statements" : [
+        "__d___ = NOT(__N_EN___)",
+        "__c___ = AND(__d___, P_EN)"
+      ],
+      "output" : "TO_CORE",
+      "inputs" : [
+        "P_EN"
+      ]
+    },
+    {
+      "name" : "IPAD2D",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "IPAD2U",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "IPAD3D",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "IPAD3U",
+      "statements" : [
+
+      ],
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "OPAD04",
+      "statements" : [
+        "PAD = NOT(IN1)"
+      ],
+      "output" : "PAD",
+      "inputs" : [
+        "IN1"
+      ]
+    },
+    {
+      "name" : "PDDR02",
+      "statements" : [
+        "__scl_net_not_0___ = NOT(D)",
+        "P_EN = OR(__scl_net_not_0___, __EN___)"
+      ],
+      "output" : "P_EN",
+      "inputs" : [
+        "D"
+      ]
+    },
+    {
+      "name" : "PDDR04",
+      "statements" : [
+        "__scl_net_not_0___ = NOT(D)",
+        "P_EN = OR(__scl_net_not_0___, __EN___)"
+      ],
+      "output" : "P_EN",
+      "inputs" : [
+        "D"
+      ]
+    }
+  ]
+}

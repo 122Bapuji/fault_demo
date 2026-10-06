@@ -1,0 +1,33 @@
+{
+  "cells" : [
+    {
+      "output" : "OUT1",
+      "inputs" : [
+        "IN1",
+        "IN2"
+      ],
+      "statements" : [
+        "__nor_w___ = OR(IN1, IN2)",
+        "OUT1 = NOT(__nor_w___)"
+      ],
+      "name" : "NOR200"
+    },
+    {
+      "output" : "OUT1",
+      "inputs" : [
+        "A",
+        "B",
+        "C"
+      ],
+      "statements" : [
+        "__scl_net_not_0___ = NOT(A)",
+        "__scl_net_not_1___ = NOT(B)",
+        "__scl_net_not_2___ = NOT(C)",
+        "__scl_net_and_02___ = AND(__scl_net_not_0___, __scl_net_not_2___)",
+        "__scl_net_and_12___ = AND(__scl_net_not_1___, __scl_net_not_2___)",
+        "OUT1 = OR(__scl_net_and_02___, __scl_net_and_12___)"
+      ],
+      "name" : "ADNR01"
+    }
+  ]
+}

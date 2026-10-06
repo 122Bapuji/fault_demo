@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<klayout-macro>
+ <description/>
+ <version/>
+ <category>lvs</category>
+ <prolog/>
+ <epilog/>
+ <doc/>
+ <autorun>false</autorun>
+ <autorun-early>false</autorun-early>
+ <priority>0</priority>
+ <shortcut/>
+ <show-in-menu>true</show-in-menu>
+ <group-name>lvs_scripts</group-name>
+ <menu-path>tools_menu.lvs.end</menu-path>
+ <interpreter>dsl</interpreter>
+ <dsl-interpreter-name>lvs-dsl-xml</dsl-interpreter-name>
+ <text>#====================================================================
+#==================== Semi-Conductor laboratory (SCL) ===============
+#=============== LVS RULE FILE FOR SCL 1.2um C1D PROCESS ============
+#===============      DATE:09/01/2026  	     ========================		               
+#====================================================================
+#
+#    SCL Proprietary PDK
+#
+#    CONFIDENTIAL - Authorized use only under SCL Non-Disclosure Agreement (NDA).
+#
+#
+#    Distribution Terms:
+#     -  Provided SOLELY under SCL NDA for evaluation/internal use.
+#     -  No redistribution, sublicensing, or public disclosure permitted.
+#     -  Future open-sourcing by SCL under separate license/terms at SCL discretion.
+#
+#    Disclaimers:
+#     -  SCL NOT LIABLE for any damages or design failures happening due to klayout tool bugs.
+#     -  User MUST validate all designs against SCL Process Design Kit (PDK)
+#        documentation and foundry specs.
+#   
+#    Acknowledgment
+#     -  Sections "FILE SETUP", "LVS RUN MODE SELECTION", "Schematic Netlist", 
+#        "Layout Netlist", "LVS REPORT", and "COMPARISON OPTIONS" created based on
+#        sky130 LVS file (Copyright 2022 Efabless Corporation, Apache License 2.0)
+#        Original source: sky130 open PDK
+#
+#================================================================//
+
+
+#================================================================//
+#================== FILE SETUP ==================================//
+#================================================================//
+
+# $schematic1 = "schematic.cdl"
+
+# $target_netlist1 = "schematic.ext"   # layout netlist    
+
+# $report_lvs     = "schematic.lvsdb" # lvs report
+
+#same_circuits("layout cell name","schematic cellname")
+
+#disable_parameter("RES", "R")
+
+#equivalent_pins("schematic cell name", "pin1", "pin2")
+
+
+$lvs_sub        = "VSS"             # net name of global net connected to substrate
+
+$run_mode       = "deep"            
+                                    # "deep" for hierarchical mode
+                                    # "flat" for flat mode
+                                
+#================================================================//
+
+require "etc"
+require "time"
+require "logger"
+
+exec_start_time = Time.now
+
+logger = Logger.new(STDOUT)
+
+logger.formatter = proc do |severity, datetime, progname, msg|
+  "#{datetime}: #{msg}\n"
+end
+
+
+#================================================
+#----------------- FILE SETUP -------------------
+#================================================
+
+if not defined? $input
+  logger.info("Starting running SCL C1D Klayout LVS runset on active layout")
+else
+  if not defined? $top_cell
+    logger.info("Starting running SCL C1D Klayout LVS runset on #{$input}")
+  else
+    logger.info("Starting running SCL C1D Klayout LVS runset on #{$input} with top cell #{$top_cell}")
+  end
+end
+
+#=== GET LAYOUT ===
+source($input, $top_cell)
+
+
+#================= LVS RUN MODE SELECTION ====================//
+
+if $run_mode == "deep"
+  #=== HIER MODE ===
+  deep
+  logger.info("deep mode is enabled.")
+
+elsif $run_mode == "flat"
+  #=== FLAT MODE ===
+  flat
+  logger.info("flat  mode is enabled.")
+
+else
+  #=== DEFAULT MODE ===
+  deep
+  logger.info("deep  mode is enabled.")
+
+end # run_mode
+
+
+#==================== Schematic Netlist ==========================//
+#schematic($schematic)
+
+if $schematic1
+  schematic($schematic1)
+  logger.info("Netlist file: #{$schematic1}")
+else
+  begin  
+    schematic("#{source.cell_name}.cdl")
+    logger.info("Netlist file: #{source.cell_name}.cdl")
+  rescue 
+    puts "No schematic loaded , please add your netlist file"
+    logger.error("No schematic loaded, please add your netlist file")
+  end 
+end
+
+
+#===================== Layout Netlist ============================//
+
+#target_netlist($target_netlist, write_spice(true), "Extracted by KLayout")
+
+if $target_netlist1
+  target_netlist($target_netlist1, write_spice(true), "Extracted by KLayout with SCL C1D LVS runset on : #{Time.now.strftime("%d/%m/%Y %H:%M")}")
+  logger.info("Extracted netlist file: #{$target_netlist1}")
+else
+  #target_netlist(File.join(File.dirname(RBA::CellView::active.filename), source.cell_name+"_extracted.cir"), custom_spice_writer,  "Extracted by KLayout with SCL C1D LVS runset on : #{Time.now.strftime("%d/%m/%Y %H:%M")}")
+   target_netlist(source.cell_name+"_extracted.cir", write_spice(true), "Extracted by KLayout")
+  logger.info("Extracted netlist file: #{source.cell_name}_extracted.cir")
+end
+
+#===================== LVS REPORT ===============================//
+
+#report_lvs($report_lvs)
+
+if $report
+  report_lvs($report)
+  logger.info("Final report: #{$report}")
+else
+  report_lvs(source.cell_name+".lvsdb")
+  logger.info("Final report: #{source.cell_name}.lvsdb")
+end
+#================================================================//
+#========================== Layers ==============================//
+#================================================================//
+
+nwell       = input(1, 0) 
+diffusion   = input(2, 0) 
+nwell_rev   = input(3, 0) 
+poly        = input(4,0)
+boron       = input(5,0)
+boron_rev   = input(6,0)
+contact     = input(7,0)
+metal1      = input(8,0)
+metal1label = input(8,7)
+metal2      = input(10,0)
+metal2label = input(10,7)
+via         = input(9,0)
+pad         = input(11,0)
+res         = input(35,0)
+respin      = input(36,0)
+dummy_pad   = input(40,0)
+nwelldiode  = input(38,0)
+pdiffdiode  = input(37,0)
+ndiffdiode  = input(39,0)
+npolyresreg = input(43,0)
+ppolyresreg = input(44,0)
+ndiffresreg = input(45,0)
+pdiffresreg = input(46,0)
+
+#================================================================//
+#======================= SUBSTRATE ==============================//
+#================================================================//
+
+psub        = diffusion &amp; boron &amp; boron_rev - nwell -  nwell_rev
+
+#================================================================//
+#---------------- NMOS transistor device extraction--------------//
+#================================================================//
+
+active_outside_nwell   = diffusion - nwell - nwell_rev
+p_plus_in_sub          = active_outside_nwell &amp; boron &amp; boron_rev - respin
+n_plus_in_sub          = active_outside_nwell - boron - boron_rev
+
+n_plus_nmos            = n_plus_in_sub - ndiffdiode - res -respin
+
+ngate                  = n_plus_nmos  &amp; poly - (poly &amp; res) - (poly &amp; respin)
+nsd                    = n_plus_nmos  - ngate
+
+poly_routing           = poly - (poly &amp; res) - (poly &amp; respin)
+
+#------------ NMOS(N) transistor device extraction---------------//
+
+                             
+ extract_devices(mos4("N"), { "SD" =&gt; nsd,                "G" =&gt; ngate,           "W" =&gt; psub,
+                              "tS" =&gt; nsd, "tD" =&gt; nsd,  "tG" =&gt; poly_routing,   "tW" =&gt; psub })
+
+#------------- NMOS(N) connect ststement ------------------------//
+
+
+connect(ngate, poly_routing)
+connect(poly_routing,contact)
+connect(nsd, contact)
+
+connect(p_plus_in_sub, psub)
+connect(contact,       p_plus_in_sub)
+
+
+#================================================================//
+#---------------- PMOS transistor device extraction--------------//
+#================================================================//
+
+active_in_nwell        = diffusion &amp; nwell &amp; nwell_rev
+
+p_plus_in_well         = active_in_nwell &amp; boron &amp; boron_rev
+n_plus_in_well         = active_in_nwell - boron - boron_rev
+
+p_plus_pmos            = p_plus_in_well - res - respin - pdiffdiode
+n_plus_pmos            = n_plus_in_well - nwelldiode - res - respin
+
+pgate                  = p_plus_pmos &amp; poly - (poly &amp; res) - (poly &amp; respin)
+psd                    = p_plus_pmos - pgate 
+
+
+#---------------- PMOS(P) transistor device extraction ------------//
+
+extract_devices(mos4("P"), { "SD"=&gt; psd,              "G"=&gt; pgate,         "W"=&gt; nwell, 
+
+                             "tS"=&gt; psd, "tD"=&gt; psd, "tG"=&gt; poly_routing, "tW"=&gt; nwell })
+
+#---------------- PMOS(P) connect ststement -----------------------//
+
+ 
+connect(psd,contact)
+
+connect(n_plus_pmos,   nwell)
+connect(contact,       n_plus_pmos)
+
+
+#================================================================//
+#------------ RESISTOR (nwell resistor :RNW) extraction ---------//
+#================================================================//
+
+nwell_res_area = res    &amp; (nwell &amp; nwell_rev  - poly - boron - boron_rev ) 
+nwell_pin      = respin &amp; (nwell &amp; nwell_rev &amp; diffusion  - boron - boron_rev)
+nwell_pin_area = respin &amp; (nwell &amp; nwell_rev - boron - boron_rev)     
+
+
+extract_devices(resistor("RNW", 2680), { "R" =&gt; nwell_res_area, "C" =&gt; nwell_pin_area, "tA" =&gt;nwell_pin, "tB" =&gt; nwell_pin })
+
+#---------- RESISTOR (nwell resistor :RNW) connect ststement ----//
+
+connect(nwell_pin, contact)
+
+#================================================================//
+#------ RESISTOR (n+ diffusion resistor :RNDIFF) extraction -----//
+#================================================================//
+
+rndiff_res_area = ndiffresreg    &amp; ( diffusion - nwell - nwell_rev - boron - boron_rev - poly)
+rndiff_pin_area = respin &amp; ( diffusion - nwell - nwell_rev - boron - boron_rev - poly)   
+
+extract_devices(resistor("RNDIFF", 30), { "R" =&gt; rndiff_res_area, "C" =&gt; rndiff_pin_area, "tA" =&gt;rndiff_pin_area, "tB" =&gt; rndiff_pin_area })
+
+#--- RESISTOR (n+ diffusion resistor :RNDIFF) connect statement --//
+
+connect(rndiff_pin_area, contact)
+
+
+#================================================================//
+#------ RESISTOR (p+ diffusion resistor :RPDIFF) extraction -----//
+#================================================================//
+
+pdiff_res_area = pdiffresreg    &amp; (nwell &amp; nwell_rev &amp; diffusion &amp; boron &amp; boron_rev - poly)
+pdiff_pin_area = respin &amp; (nwell &amp; nwell_rev &amp; diffusion &amp; boron &amp; boron_rev - poly)   
+
+extract_devices(resistor("RPDIFF", 68), { "R" =&gt; pdiff_res_area, "C" =&gt; pdiff_pin_area, "tA" =&gt;pdiff_pin_area, "tB" =&gt; pdiff_pin_area })
+
+#--- RESISTOR (p+ diffusion resistor :RPDIFF) connect statement --//
+
+connect(pdiff_pin_area, contact)
+
+#================================================================//
+#------------ POLY RESISTOR extraction --------------------------//
+#================================================================//
+
+ppoly           = poly   &amp; boron &amp; boron_rev
+npoly           = poly   - ppoly
+
+polypin         = respin &amp; poly
+
+rnchpoly        = npolyresreg    &amp; npoly
+rpchpoly        = ppolyresreg    &amp; ppoly
+
+ipoly           = polypin.interacting(rpchpoly)
+inchpl          = polypin.interacting(rnchpoly)
+
+#================================================================//
+#------------ RESISTOR (RPP) extraction -------------------------//
+#================================================================//
+
+extract_devices(resistor("RPP", 31), { "R" =&gt; rpchpoly, "C" =&gt; ipoly, "tA" =&gt;ipoly, "tB" =&gt; ipoly })
+
+#================================================================//
+#------------ RESISTOR (RNP) extraction -------------------------//
+#================================================================//
+
+extract_devices(resistor("RNP", 23), { "R" =&gt; rnchpoly, "C" =&gt; inchpl, "tA" =&gt;inchpl, "tB" =&gt; inchpl })
+
+#------------ POLY RESISTOR connect ststement ------------------//
+
+connect(metal1,ipoly)
+connect(metal1,ipoly)
+connect(metal1,inchpl)
+
+#================================================================//
+#------------------ N+/P-sub diode (dndiffpsub) -----------------//
+#================================================================//
+
+
+psub2        = diffusion &amp; ndiffdiode - nwell -  nwell_rev -  boron - boron_rev  
+
+
+active_outside_nwell  = diffusion - nwell - nwell_rev
+
+n_dndiffpsub          = active_outside_nwell &amp;  ndiffdiode -  boron - boron_rev  
+
+n_dndiffpsub          = diffusion &amp;  ndiffdiode - nwell - nwell_rev  -  boron - boron_rev
+
+extract_devices(diode("dndiffpsub"),  { "P"  =&gt; n_dndiffpsub,         "N"  =&gt; n_dndiffpsub, 
+                                        "tA" =&gt; psub,                 "tC" =&gt; n_dndiffpsub})
+
+connect(n_dndiffpsub, contact)
+
+
+#================================================================//
+#-------------- N-well/P-substrate Diode(dnwellpsub) ------------//
+#================================================================//
+
+
+nwelldiode_n = nwelldiode &amp; nwell &amp; nwell_rev  - boron -boron_rev - poly - res -respin
+
+nwelldiode_a = nwelldiode - res -respin
+                                        
+extract_devices(diode("dnwellpsub"),  { "P"  =&gt; nwelldiode_a,   "N"  =&gt; nwelldiode_a, 
+                                        "tA" =&gt; psub ,          "tC" =&gt; nwelldiode_n})                                        
+                                        
+#---- N-well/P-substrate Diode(dnwellpsub)  Connect Statement ---//
+
+connect(nwelldiode_n,contact)
+
+#================================================================//
+#------------ P+/N-well (isolated) diode(dpdiffnwell) -----------//
+#================================================================//
+
+dpdiffnwell_p =  nwell &amp; nwell_rev &amp; diffusion &amp; boron &amp; boron_rev &amp; pdiffdiode -res-respin 
+
+dpdiffnwell_n =  diffusion &amp; (nwell &amp; nwell_rev  - boron - boron_rev - pdiffdiode) -res -respin
+
+extract_devices(diode("dpdiffnwell"), { "P"  =&gt; dpdiffnwell_p, "N"  =&gt; nwell}) 
+
+connect(dpdiffnwell_n, nwell)
+connect(contact,       dpdiffnwell_n)
+connect(dpdiffnwell_p, contact)
+                                     
+#================================================================//
+#--------------------- Metal and via Connect Statement  ---------//
+#================================================================//
+
+connect(contact, metal1)
+connect(metal1,  via)
+connect(via,     metal2)
+connect(metal1,metal1label)
+connect(metal2,metal2label)
+#================================================================//
+#================= GLOBAL connect ststement =====================//
+#================================================================//
+
+connect_global(psub, $lvs_sub)
+
+#================================================================//
+
+
+#================================================
+#------------- COMPARISON OPTIONS ---------------
+#================================================
+
+tolerance("N",      "L", :relative =&gt; 0.03)
+tolerance("N",      "W", :relative =&gt; 0.03)
+tolerance("P",      "L", :relative =&gt; 0.03)
+tolerance("P",      "W", :relative =&gt; 0.03)
+tolerance("RNW",    "R", :relative =&gt; 0.03)
+tolerance("RNDIFF", "R", :relative =&gt; 0.03)
+tolerance("RPDIFF", "R", :relative =&gt; 0.03)
+tolerance("RPP",    "R", :relative =&gt; 0.03)
+tolerance("RNP",    "R", :relative =&gt; 0.03)
+
+#================================================
+#------------- COMPARISON OPTIONS ---------------
+#================================================
+
+#=== FLATTEN CELLS ========
+align
+
+#=== NETLIST EXTRACTION ===
+#netlist
+netlist.simplify
+
+#=== SCHEMATIC OPTIONS ====
+schematic.simplify
+
+#=== COMPARE ==============
+compare
+
+exec_end_time = Time.now
+run_time = exec_end_time - exec_start_time
+logger.info(format('LVS Total Run time %f seconds', run_time))
+
+if !compare
+  logger.info('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+  logger.error("ERROR : Netlists don't match")
+  logger.info('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+else
+  logger.info('==========================================')
+  logger.info('INFO : Congratulations! Netlists match.')
+  logger.info('==========================================')
+end
+
+#================================================
+
+</text>
+</klayout-macro>

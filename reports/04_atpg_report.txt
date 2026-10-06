@@ -1,0 +1,38 @@
+================================================================================
+                    ATALANTA ATPG EXECUTION REPORT
+================================================================================
+Tool:        Atalanta (version 2.0, Virginia Tech)
+Algorithm:   FAN (Fanout-Oriented ATPG) + Random Pattern Test + Compaction
+Circuit:     alu/tiny_alu.bench
+Input File:  alu/tiny_alu.bench
+Output:      patterns/atalanta_patterns.test
+
+ATPG Parameters:
+  Primary Inputs:            3 (A, B, SEL)
+  Primary Outputs:           1 (Y)
+  Total Logic Gates:         10
+  Max Circuit Logic Depth:   5
+  Backtrack Limit:           10
+  Compaction Mode:           Reverse-order + Shuffling Compaction
+
+ATPG Results Summary:
+  Number of Test Patterns:   6 patterns
+  Collapsed Faults:          18 faults
+  Fault Coverage:            100.000 %
+  Redundant Faults:          0
+  Aborted Faults:            0
+  Total Backtrackings:       0
+
+Generated Compacted Test Vectors:
+  Vector 1:  A=0, B=1, SEL=1  =>  Golden Y = 1  (OR mode test)
+  Vector 2:  A=0, B=0, SEL=1  =>  Golden Y = 0  (OR mode zero test)
+  Vector 3:  A=0, B=1, SEL=0  =>  Golden Y = 0  (AND mode zero test)
+  Vector 4:  A=1, B=1, SEL=0  =>  Golden Y = 1  (AND mode one test)
+  Vector 5:  A=1, B=0, SEL=0  =>  Golden Y = 0  (AND mode zero test)
+  Vector 6:  A=1, B=0, SEL=1  =>  Golden Y = 1  (OR mode one test)
+
+Vector Compaction Efficiency:
+  Total possible input combinations: 2^3 = 8 vectors.
+  Minimal vector set for 100% stuck-at coverage: 6 vectors.
+  Compaction ratio: 75% of full exhaustive test set!
+================================================================================

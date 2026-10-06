@@ -1,0 +1,25 @@
+==========================================================================================================
+                        TINY ALU DFT DEMONSTRATION: FAULT INJECTION & DETECTION TABLE                     
+==========================================================================================================
+| # | Target Fault Site       | Fault |  A  B SEL | Good Y | Faulty Y | Activated? | Propagated? | Detected? |
+|---|-------------------------|-------|-----------|--------|----------|------------|-------------|-----------|
+| 1 | Net _0_ (NOR200 OUT)    | SA0   |  1  0   0  |   0    |    1     |    YES     |     YES     |    YES    |
+| 2 | Net _0_ (NOR200 OUT)    | SA1   |  1  0   1  |   1    |    0     |    YES     |     YES     |    YES    |
+| 3 | Net _1_ (ADNR01 OUT)    | SA0   |  0  1   0  |   0    |    1     |    YES     |     YES     |    YES    |
+| 4 | Net _1_ (ADNR01 OUT)    | SA1   |  1  1   0  |   1    |    0     |    YES     |     YES     |    YES    |
+| 5 | Primary Output Y        | SA0   |  1  1   0  |   1    |    0     |    YES     |     YES     |    YES    |
+| 6 | Primary Output Y        | SA1   |  0  0   1  |   0    |    1     |    YES     |     YES     |    YES    |
+| 7 | Primary Input A         | SA0   |  1  1   0  |   1    |    0     |    YES     |     YES     |    YES    |
+| 8 | Primary Input A         | SA1   |  0  0   1  |   0    |    1     |    YES     |     YES     |    YES    |
+| 9 | Primary Input B         | SA0   |  1  1   0  |   1    |    0     |    YES     |     YES     |    YES    |
+|10 | Primary Input B         | SA1   |  0  0   1  |   0    |    1     |    YES     |     YES     |    YES    |
+|11 | Primary Input SEL       | SA0   |  1  0   1  |   1    |    0     |    YES     |     YES     |    YES    |
+|12 | Primary Input SEL       | SA1   |  1  0   0  |   0    |    1     |    YES     |     YES     |    YES    |
+|---|-------------------------|-------|-----------|--------|----------|------------|-------------|-----------|
+|   | *** FAULT MASKING / BLOCKING EXAMPLES (Fault is activated, but propagation is BLOCKED)             |
+|---|-------------------------|-------|-----------|--------|----------|------------|-------------|-----------|
+|13 | Input A SA0 (Masked by B) | SA0   |  1  0   0  |   0    |    0     |    YES     |     NO      |    NO     |
+|14 | Net _1_ SA0 (Masked by _0) | SA0   |  0  0   0  |   0    |    0     |    YES     |     NO      |    NO     |
+==========================================================================================================
+Demonstration completed successfully.
+alu/tb_fault_injection.v:70: $finish called at 42000 (1ps)

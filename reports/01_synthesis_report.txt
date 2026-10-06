@@ -1,0 +1,25 @@
+================================================================================
+                    TINY ALU SYNTHESIS REPORT (SCL 1.2um C1D)
+================================================================================
+Target Library: pdk_scl_1p2um/digital_c1d/lib/c1d_core_typ.lib
+Top Module:     tiny_alu
+Input RTL:      alu/tiny_alu.sv
+Output Netlist: alu/tiny_alu_netlist.v
+
+Cell Utilization:
+  NOR200 (2-input NOR gate):        2 cells
+  ADNR01 (AND-Down-NOR gate):       1 cell
+Total Standard Cells:               3 cells
+
+Port List:
+  Primary Inputs:  A, B, SEL (3 bits)
+  Primary Outputs: Y (1 bit)
+
+Logic Function Implemented:
+  Gate _2_ (NOR200): _0_ = ~(SEL | B)
+  Gate _3_ (ADNR01): _1_ = ~((SEL & B) | A)
+  Gate _4_ (NOR200): Y   = ~(_0_ | _1_) = (_0_==0 && _1_==0)
+  Equivalent to Majority Function MAJ(A, B, SEL):
+    SEL=0 => Y = A & B  (AND operation)
+    SEL=1 => Y = A | B  (OR operation)
+================================================================================
